@@ -9,7 +9,7 @@ def access(url, driver=None):
     # print("Starting...")
     options = Options()
     options.add_argument("--headless")
-    options.add_argument('allow-elevated-browser')
+    # options.add_argument('allow-elevated-browser')
 
     if driver is None:
         # driver = webdriver.Edge(executable_path="msedgedriver.exe", options=options)
