@@ -8,7 +8,10 @@ def access(url, driver=None):
     options.add_argument("--headless")
 
     if driver is None:
-        driver = webdriver.Edge(options=options)
+        driver = webdriver.Edge(
+            executable_path="msedgedriver.exe",
+            options=options
+            )
     
     driver.get(url)    
     driver.implicitly_wait(time_to_wait=5)
