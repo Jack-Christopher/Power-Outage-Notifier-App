@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Power Outage Notifier Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jack-Christopher/Power-Outage-Notifier-App.git"
+  },
+  "author": "JC2102",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jack-Christopher/Power-Outage-Notifier-App/issues"
+  },
+  "homepage": "https://github.com/Jack-Christopher/Power-Outage-Notifier-App#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.6.2",
+    "express": "^4.18.1",
+    "jssoup": "^0.0.15",
+    "puppeteer": "^17.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
