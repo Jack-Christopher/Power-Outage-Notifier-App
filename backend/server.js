@@ -1,11 +1,10 @@
 const express = require('express')
 const app = express()
-const port = 3000 || process.env.PORT
 const db = require('./services/db')
 const reportsRouter = require('./routes/reports')
 
 // start the server
-app.listen(port, () => {
+app.listen(process.env.PORT || 5000, () => {
     console.log('API server listening on port ' + port);
     db.init();
 })
