@@ -15,6 +15,7 @@ router.get('/all', function(req, res, next) {
 
 // GET reports from seeker
 router.get('/seeker', function(req, res, next) {
+    req.setTimeout(0);
     try {
         seeker.scraper().then((data) => {
             res.json(data);
