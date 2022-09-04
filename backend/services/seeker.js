@@ -7,6 +7,7 @@ async function scraper() {
     var url = 'http://www.seal.com.pe/clientes/SitePages/Cortes.aspx';
     const browser = await puppeteer.launch({
         'headless': true,
+        'args': ['--no-sandbox']
     });
 
     const page = await browser.newPage();
