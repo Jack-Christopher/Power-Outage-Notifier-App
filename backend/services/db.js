@@ -9,6 +9,9 @@ function init() {
         value TEXT
     )`).run();
 
+    // insert default settings
+    db.prepare(`INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)`).run('last_update', '2000-01-01');
+
     db.prepare(`CREATE TABLE IF NOT EXISTS reports (
         id INTEGER PRIMARY KEY,
         date TEXT,
@@ -22,7 +25,7 @@ function getSetting(key) {
 }
 
 function setSetting(key, value) {
-    db.prepare(`INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)`).run(key, value);
+    db.prepare(`UPDATE settings SET value = ? WHERE key = ?`).run(value, key);
 }
 
 
@@ -37,6 +40,16 @@ function getReports() {
 }
 
 
+function getIdList() {
+    var id_list = [];
+    const data = db.prepare(`SELECT id FROM reports ORDER BY date DESC`).all();
+    for (var i = 0; i < data.length; i++) {
+        id_list.push(parseInt(data[i].id));
+    }
+    
+    return id_list;
+}
+
 function query(sql, params) {
   return db.prepare(sql).all(params).run();
 }
@@ -48,5 +61,6 @@ module.exports = {
     getSetting,
     setSetting,
     addReport,
-    getReports
+    getReports,
+    getIdList
 };
