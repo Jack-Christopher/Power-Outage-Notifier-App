@@ -1,5 +1,3 @@
-const sqlite = require('better-sqlite3');
-const path = require('path');
 
 const { Pool } = require('pg')
 
