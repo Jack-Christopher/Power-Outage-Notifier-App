@@ -50,6 +50,11 @@ function getIdList() {
     return id_list;
 }
 
+function clear() {
+    db.prepare(`DELETE FROM reports`).run();
+    db.prepare(`DELETE FROM settings`).run();
+}
+
 function query(sql, params) {
   return db.prepare(sql).all(params).run();
 }
@@ -62,5 +67,6 @@ module.exports = {
     setSetting,
     addReport,
     getReports,
-    getIdList
+    getIdList,
+    clear
 };

@@ -16,7 +16,10 @@ app.get('/', (req, res) => {
 
 app.use('/reports', reportsRouter)
 
-
+app.use('/clear', (req, res) => {
+    db.clear();
+    res.json('Database cleared');
+})
 
 // Default response for any other request
 app.use(function(req, res){

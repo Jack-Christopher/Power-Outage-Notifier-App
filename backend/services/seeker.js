@@ -18,7 +18,6 @@ async function scraper() {
         return prevIdList;
     }
 
-
     var url = 'http://www.seal.com.pe/clientes/SitePages/Cortes.aspx';
     const browser = await puppeteer.launch({
         'headless': true,
