@@ -30,7 +30,7 @@ function setSetting(key, value) {
 
 
 function addReport(report) {
-  db.prepare(`INSERT INTO reports (id, date, description) VALUES (?, ?, ?)`).run(report.id, report.date, report.description);
+  db.prepare(`INSERT OR IGNORE INTO reports (id, date, description) VALUES (?, ?, ?)`).run(report.id, report.date, report.description);
 }
 
 function getReports() {
