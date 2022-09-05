@@ -18,9 +18,9 @@
   },
   "homepage": "https://github.com/Jack-Christopher/Power-Outage-Notifier-App#readme",
   "dependencies": {
-    "better-sqlite3": "^7.6.2",
     "express": "^4.18.1",
     "jssoup": "^0.0.15",
+    "pg": "^8.8.0",
     "puppeteer": "^17.1.0"
   }
 }
