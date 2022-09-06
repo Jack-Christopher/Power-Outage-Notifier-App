@@ -50,15 +50,15 @@ function init() {
     });
 }
 
-function getSetting(key) {
-    const row = db.query(`SELECT value FROM settings WHERE key = $1`, [key], (err, res) => {
-        if (err) {
-            console.log('Error getting setting: ', err);
-        } else {
-            console.log('Got setting');
-        }
-    });
-    return row ? row.value : null;
+async function getSetting(key) {
+    try {
+        const res = await db.query(`SELECT value FROM settings WHERE key = $1`, [key]);
+        console.log('Setting: ', key, ' = ', res.rows[0].value);
+        const val = {value: res.rows[0].value};
+        return val;
+    } catch (err) {
+        console.log('Error getting setting: ', err);
+    }
 }
 
 function setSetting(key, value) {
@@ -98,23 +98,22 @@ async function getReports() {
 }
 
 
-function getIdList() {
-    var id_list = [];
-    const data = db.query(`SELECT id FROM reports ORDER BY date DESC`, (err, res) => {
-        if (err) {
-            console.log('Error getting reports: ', err);
-        } else {
-            console.log('Got id list');
-        }
-    });
-    // iterate over data elements and add id to id_list
-    if (data) {
-        for (var i = 0; i < data.rows.length; i++) {
-            id_list.push(data.rows[i].id);
-        }
-    }
+async function getIdList() {
+    try
+    {
+        var id_list = [];
+        const data = await db.query(`SELECT id FROM reports`);
+        data.rows.forEach((row) => {
+            id_list.push(row.id);
+        });
+        const result = {data: id_list};
+        console.log(id_list);
 
-    return id_list;
+        return result;
+    } catch (err) {
+        console.log('Error getting id list: ', err);
+    }        
+    
 }
 
 function clear() {

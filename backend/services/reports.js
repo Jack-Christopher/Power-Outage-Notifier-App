@@ -7,6 +7,14 @@ function getAll() {
     return data;
 }
 
+function getLastUpdate() {
+    const data = db.getSetting('last_update');
+
+    return data;
+}
+
+
 module.exports = {
-    getAll
+    getAll,
+    getLastUpdate
 }

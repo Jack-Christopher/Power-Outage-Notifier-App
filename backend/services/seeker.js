@@ -5,11 +5,14 @@ const db = require('../services/db');
 
 async function scraper() {
     // get last_update from db
-    const last_update = db.getSetting('last_update');
+    var last_update = await db.getSetting('last_update');
+    last_update = last_update.value;
+
     console.log('last_update: (' + last_update + ')\n');
 
     // get list or empty list
-    var prevIdList = db.getIdList();
+    var prevIdList = await db.getIdList();
+    prevIdList = prevIdList.data;
     console.log('prevIdList: (' + prevIdList + ')\n');
 
     if (last_update == new Date().toISOString().slice(0, 10)) {
@@ -43,6 +46,7 @@ async function scraper() {
         id_list.push(data[i].replaceAll('"', ''))
     }
     console.log('List of id\'s: ' + id_list, '\n');
+    console.log('[[last_update]]: (' + last_update + ')\n');
 
     // iterate over each power outage report
     for (var i = 0; i < id_list.length; i++) {
