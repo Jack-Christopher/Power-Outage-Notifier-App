@@ -1,15 +1,20 @@
 
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
-const db = new Client({
+const db = new Pool({
   connectionString: process.env.DATABASE_URL,
+//   connectionString: "postgres://uqzlcuesqkbero:8fc75d4d41b86974a2508902e7051ed12dddedb75c09cb5ee6c091d2e08e57ed@ec2-54-147-36-107.compute-1.amazonaws.com:5432/dekp81d2um28pn",
   ssl: {
     rejectUnauthorized: false
   }
 });
 
-console.log('DATABASE_URL: ', process.env.DATABASE_URL);
-db.connect();
+// console.log('DATABASE_URL: ', process.env.DATABASE_URL);
+(async () => {
+    await db.connect();
+    console.log('Connected to database');
+})();
+
 
 
 function init() {
@@ -79,15 +84,17 @@ function addReport(report) {
     );
 }
 
-function getReports() {
-    const data = db.query(`SELECT * FROM reports ORDER BY date DESC`, (err, res) => {
-        if (err) {
-            console.log('Error getting reports: ', err);
-        } else {
-            console.log('Got reports');
-        }
-    });
-    return data;
+async function getReports() {
+    try {
+        const res = await db.query('SELECT * FROM reports');
+        const result = {data: res.rows};
+        // console.log('Got reports');
+        // console.log(result);
+
+        return result;
+    } catch (err) {
+        console.log(err.stack);
+    }
 }
 
 
@@ -97,13 +104,16 @@ function getIdList() {
         if (err) {
             console.log('Error getting reports: ', err);
         } else {
-            console.log('Got reports');
+            console.log('Got id list');
         }
     });
-    for (var i = 0; i < data.length; i++) {
-        id_list.push(parseInt(data[i].id));
+    // iterate over data elements and add id to id_list
+    if (data) {
+        for (var i = 0; i < data.rows.length; i++) {
+            id_list.push(data.rows[i].id);
+        }
     }
-    
+
     return id_list;
 }
 

@@ -6,7 +6,10 @@ const seeker = require('../services/seeker');
 // GET reports listing
 router.get('/all', function(req, res, next) {
     try {
-        res.json(reports.getAll(req.query.page));
+        // res.json(reports.getAll(req.query.page));
+        reports.getAll().then((data) => {
+            res.json(data);
+        });
     } catch(err) {
         console.error(`Error while getting reports: `, err.message);
         next(err);
