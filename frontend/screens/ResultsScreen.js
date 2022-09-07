@@ -12,12 +12,77 @@ class ResultsScreen extends Component
 
         this.styles = GetStyles(["container", "appTitle", "button", "icon", "message", "item", "list", "input"]);
         this.state = {
-            data : ['Loading', 'data']
+            // data : ['Loading', 'data']
+            data : [],
+            filteredData : [],
+            selectedDistricts : [],
         };
         this.getData();
+        this.getDistricts();
+        setTimeout(() => {
+            this.filterData();
+        }, 1000);        
     }
 
+
+    fetchData = async () => {
+        console.log("init fetchData");
+        let url = "https://power-outage-notifier.herokuapp.com/reports/all";
+        let resp = await fetch(url, {
+            "method": "GET",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(response => response.data)
+            .then(data => this.setState({data: data}))
+            .catch(error => console.log(error));
+        console.log("end fetchData");
+        console.log("this.state.data: ", this.state.data);
+
+        this.saveReport();
+    }
+    
+
     getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('reports');
+            if(value !== null) {
+                // value previously stored
+                this.setState({
+                    data : JSON.parse(value),
+                });
+            }
+            else {
+                console.log("Not found, creating new array");
+                // value not found, set default value
+                this.setState({reports : []});
+                // store default value in async storage
+                await AsyncStorage.setItem('reports', JSON.stringify(this.state.data));
+            }
+        } catch(e) {
+        // error reading value
+        }
+        console.log("reports got");
+    }
+
+ 
+
+    saveReport = async () => {
+        try {
+            // from this.state.data
+            await AsyncStorage.setItem('reports', JSON.stringify(this.state.data));
+            ToastAndroid.show('Reports saved', ToastAndroid.SHORT);
+            console.log("Reports saved");
+        } catch (e) {
+            console.log("error saving reports: ", e);
+        }
+    }
+
+
+    getDistricts = async () => {
         try {
             const value = await AsyncStorage.getItem('selectedDistricts');
             if(value !== null) {
@@ -40,50 +105,49 @@ class ResultsScreen extends Component
         console.log("this.state.selectedDistricts: ", this.state.selectedDistricts);
     }
 
-    addDistrict = async () => {
-        try {
-            // if current district is not in district list, add it
-            if (this.state.currentDistrict !== "" && !this.state.selectedDistricts.includes(this.state.currentDistrict)) {
-                this.state.selectedDistricts.push(this.state.currentDistrict);
-                await AsyncStorage.setItem('selectedDistricts', JSON.stringify(this.state.selectedDistricts));
-                ToastAndroid.show('District added', ToastAndroid.SHORT); 
-                console.log("this.state.selectedDistricts: ", this.state.selectedDistricts);           
-            } else {
-                ToastAndroid.show('District already added', ToastAndroid.SHORT);
-                console.log("District already added");
-            }
-        } catch (e) {
-            console.log("error saving selectedDistricts: ", e);
-        }
+
+    
+    filterData = () => {
+        console.log("init filterData");
+        // console.log("Filtering data");
+        this.state.selectedDistricts.forEach(dist => {
+            console.log("dist: ", dist);
+            this.state.data.forEach(report => {
+                console.log("report: ", report.id);
+                // if district appears in data, add it to state
+                if ( report.description.includes(dist) ) {
+                    this.setState({
+                        filteredData : [...this.state.filteredData, report]
+                    });
+                    console.log("District found: ", dist);
+                }
+            });
+        });
+        console.log("end filterData");
     }
+       
 
 
     render()
     {
         return(
             <View style={this.styles.container}>
-                <Text style={this.styles.appTitle}>
-                    Results
-                </Text>
 
-                <Text style={this.styles.message}>
-                    {this.state.data.map((item, index) => {
-                        return <Result key={index} district={item} />
-                    }
-                    )}
-                    
-                    
-                </Text>
-
+                <Result 
+                    data={this.state.filteredData}
+                    districts={this.state.selectedDistricts}
+                    navigation={this.props.navigation} 
+                />
                
                 <TouchableOpacity
                     style={this.styles.button}
                     onPress={() => {
-                        this.addDistrict();
+                        this.fetchData();
+                        console.log("Data fetched");
                     }}
                 >
                     <Text>
-                        Get Results
+                        Update Results
                     </Text>
                 </TouchableOpacity>
             </View>
