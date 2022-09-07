@@ -19,9 +19,11 @@ const AllStyles = {
     button:
     {
         backgroundColor: "#1DB954",
-        padding: 12,
-        margin: 15,
+        padding: 14,
+        margin: 20,
+        paddingVertical: 10,
         borderRadius: 7,
+        elevation: 3,
     },
 
     icon:
@@ -49,9 +51,31 @@ const AllStyles = {
         color: 'white',
     },
 
+    result:
+    {
+        padding: 10,
+        fontSize: 12,
+        marginVertical: 3,
+        marginHorizontal: 8,
+        height: 50,
+        color: 'white',
+    },
+
+    report:
+    {
+        padding: 10,
+        fontSize: 13,
+        marginVertical: 3,
+        marginHorizontal: 8,
+        // height: 50,
+        color: 'white',
+    },
+
     list:
     {
         marginBottom: 5,
+        marginTop: 7,
+        height: 500,
     },
 
     input:
